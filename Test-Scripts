@@ -1,0 +1,29 @@
+#FUNCIONA
+foreach($role in Get-VIRole -name 'CUSTOM - ARIA OPS COLLECTOR'){
+
+    Get-VIPrivilege -Role $role |
+
+    Select @{N="Role";E={$role.Name}},@{N="Privilege Name";E={$_.Name}},@{N="Privilege ID";E={$_.ID}}
+
+}
+
+#FUNCIONA
+foreach($role in Get-VIRole -name 'CUSTOM - ARIA OPS COLLECTOR'){
+
+    Get-VIPrivilege -Role $role |
+
+    Select @{N="Role";E={$role.Name}},@{N="Parent Group";E={$_.ParentGroup}},@{N="Parent Group ID";E={$_.ParentGroupId}},@{N="Privilege Name";E={$_.Name}},@{N="Privilege ID";E={$_.ID}}
+
+}
+
+#FUNCIONA
+# https://notesofascripter.com/2021/12/28/export-vcenter-roles-and-permissions-with-powercli/
+(Get-VIRole -name “CUSTOM - ARIA OPS COLLECTOR”).ExtensionData.Privilege
+
+#FUNCIONA
+$Role = New-VIRole -Name "CUSTOM - ARIA OPS COLLECTOR CLONE"
+$privilege = Get-content C:\Temp\ExtractedRole.txt
+$privilege | foreach {Set-VIRole -role $role -AddPrivilege (get-viprivilege -id $_) }
+
+# FUNCIONA
+Get-VIPermission | select Role, Entity, Principal, Propagate, IsGroup | Export-Csv -Path "C:\temp\Global_Permissions.csv" -NoTypeInformation
